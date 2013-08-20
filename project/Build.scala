@@ -5,14 +5,14 @@ import xml.XML
 
 object MessagePackScalaBuild extends Build {
   
-  val messagePackVersion = "0.6.7-SNAPSHOT"
+  val messagePackVersion = "0.6.7"
 
 
   override lazy val settings = super.settings ++
       Seq(
         organization := "org.msgpack",
         name := "msgpack-scala",
-        version := messagePackVersion,
+        version := messagePackVersion + "-SNAPSHOT",
         scalaVersion := "2.10.2",
         crossScalaVersions := Seq("2.9.0-1","2.9.1","2.9.1-1","2.9.2"),
         resolvers ++= Seq(Resolver.mavenLocal),
