@@ -13,7 +13,7 @@ object MessagePackScalaBuild extends Build {
         organization := "org.msgpack",
         name := "msgpack-scala",
         version := messagePackVersion,
-        scalaVersion := "2.9.2",
+        scalaVersion := "2.10.2",
         crossScalaVersions := Seq("2.9.0-1","2.9.1","2.9.1-1","2.9.2"),
         resolvers ++= Seq(Resolver.mavenLocal),
         parallelExecution in Test := false
@@ -31,6 +31,7 @@ object MessagePackScalaBuild extends Build {
 
   lazy val dependsOnScalaVersion = (scalaVersion) { v => {
     val specs = v match{
+      case "2.10.2"  => "org.specs2" %% "specs2" % "1.12.3" % "test"
       case "2.9.2"  => "org.specs2" %% "specs2" % "1.12.3" % "test"
       case "2.9.1-1" => "org.specs2" %% "specs2" % "1.12.3" % "test"
       case "2.9.1"  => "org.specs2" %% "specs2" % "1.12.3" % "test"
@@ -54,12 +55,13 @@ object MessagePackScalaBuild extends Build {
                             libraryDependencies <++= dependsOnScalaVersion,
                             publishMavenStyle := true,
                             publishArtifact in Test := false,
+                            credentials += Credentials(Path.userHome / ".thefactory" / "credentials"),
                             publishTo <<= version { (v: String) =>
-                              val nexus = "https://oss.sonatype.org/"
-                              if (v.trim.endsWith("SNAPSHOT")) 
-                                Some("snapshots" at nexus + "content/repositories/snapshots") 
+                              val nexus = "http://maven.thefactory.com/nexus/content/repositories/"
+                              if (v.trim.endsWith("SNAPSHOT"))
+                                Some("snapshots" at nexus + "snapshots")
                               else
-                                Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+                                Some("releases"  at nexus + "releases")
                             },
                             pomIncludeRepository := { _ => false },
                             pomExtra := loadPomExtra()
